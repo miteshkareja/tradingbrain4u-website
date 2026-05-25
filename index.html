@@ -7,13 +7,18 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: { slate: { 850: '#151e2e', 950: '#020617' } }
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        slate: { 850: '#151e2e', 950: '#020617' }
+                    }
                 }
             }
         }
@@ -21,8 +26,8 @@
     <style>
         :root {
             --accent-blue: #2563eb;
-            --accent-indigo: #4f46e5;
-            --glass-border: rgba(255,255,255,0.06);
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
         }
 
         body {
@@ -39,108 +44,123 @@
 
         ::selection { background: #3b82f6; color: white; }
 
-        /* ===== ANIMATED BACKGROUND MESH ===== */
+        /* ===== ANIMATED BACKGROUND ===== */
         .animated-bg {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            pointer-events: none;
-            overflow: hidden;
+            position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
             background: radial-gradient(ellipse at 50% 0%, #0f172a 0%, #020617 60%);
         }
-
-        /* Subtle moving grid */
         .bg-grid {
-            position: absolute;
-            inset: -50%;
-            width: 200%;
-            height: 200%;
-            background-image:
-                linear-gradient(rgba(59,130,246,0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(59,130,246,0.03) 1px, transparent 1px);
+            position: absolute; inset: -50%; width: 200%; height: 200%;
+            background-image: linear-gradient(rgba(59,130,246,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,0.03) 1px, transparent 1px);
             background-size: 60px 60px;
             transform: perspective(500px) rotateX(60deg) translateY(-100px) translateZ(-200px);
             animation: gridMove 20s linear infinite;
-            opacity: 0.6;
+            opacity: 0.5;
         }
         @keyframes gridMove {
             0% { transform: perspective(500px) rotateX(60deg) translateY(0) translateZ(-200px); }
             100% { transform: perspective(500px) rotateX(60deg) translateY(60px) translateZ(-200px); }
         }
 
-        /* Floating orbs */
-        .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.12;
-            pointer-events: none;
-        }
-        .orb-1 {
-            width: 500px; height: 500px; background: #2563eb;
-            top: -10%; left: 20%;
-            animation: floatOrb1 18s ease-in-out infinite alternate;
-        }
-        .orb-2 {
-            width: 400px; height: 400px; background: #4f46e5;
-            bottom: 10%; right: 10%;
-            animation: floatOrb2 22s ease-in-out infinite alternate;
-        }
-        .orb-3 {
-            width: 300px; height: 300px; background: #0ea5e9;
-            top: 40%; left: 60%;
-            animation: floatOrb3 16s ease-in-out infinite alternate;
-            opacity: 0.08;
-        }
-        @keyframes floatOrb1 {
-            0% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(60px, 80px) scale(1.1); }
-            100% { transform: translate(-40px, 40px) scale(0.95); }
-        }
-        @keyframes floatOrb2 {
-            0% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(-50px, -60px) scale(1.15); }
-            100% { transform: translate(30px, -30px) scale(1); }
-        }
-        @keyframes floatOrb3 {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(-80px, 50px); }
-        }
+        /* Orbs */
+        .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.1; pointer-events: none; }
+        .orb-1 { width: 500px; height: 500px; background: #2563eb; top: -10%; left: 20%; animation: floatOrb1 18s ease-in-out infinite alternate; }
+        .orb-2 { width: 400px; height: 400px; background: #4f46e5; bottom: 10%; right: 10%; animation: floatOrb2 22s ease-in-out infinite alternate; }
+        .orb-3 { width: 300px; height: 300px; background: #0ea5e9; top: 40%; left: 60%; animation: floatOrb3 16s ease-in-out infinite alternate; opacity: 0.06; }
+        @keyframes floatOrb1 { 0% { transform: translate(0,0) scale(1); } 50% { transform: translate(60px,80px) scale(1.1); } 100% { transform: translate(-40px,40px) scale(0.95); } }
+        @keyframes floatOrb2 { 0% { transform: translate(0,0) scale(1); } 50% { transform: translate(-50px,-60px) scale(1.15); } 100% { transform: translate(30px,-30px) scale(1); } }
+        @keyframes floatOrb3 { 0% { transform: translate(0,0); } 100% { transform: translate(-80px,50px); } }
 
-        /* Particle canvas sits above orbs, below content */
-        #particle-canvas {
-            position: fixed;
-            inset: 0;
-            z-index: 1;
-            pointer-events: none;
-            opacity: 0.35;
-        }
+        /* Dust particles */
+        .dust { position: absolute; width: 2px; height: 2px; background: rgba(96,165,250,0.25); border-radius: 50%; animation: dustFloat linear infinite; }
+        @keyframes dustFloat { 0% { transform: translateY(0) translateX(0); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(-100vh) translateX(20px); opacity: 0; } }
 
-        /* ===== GLASS & CARDS ===== */
+        /* ===== TICKER TAPE ===== */
+        .ticker-wrap {
+            width: 100%; overflow: hidden; background: rgba(15,23,42,0.7);
+            border-bottom: 1px solid rgba(59,130,246,0.1);
+            backdrop-filter: blur(10px);
+            padding: 8px 0;
+            position: relative;
+            z-index: 30;
+        }
+        .ticker-track {
+            display: inline-flex;
+            white-space: nowrap;
+            animation: tickerScroll 30s linear infinite;
+        }
+        .ticker-item {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 0 32px; font-family: 'JetBrains Mono', monospace;
+            font-size: 13px; font-weight: 500; color: #94a3b8;
+        }
+        .ticker-symbol { color: #e2e8f0; font-weight: 600; letter-spacing: 0.05em; }
+        .ticker-up { color: #34d399; }
+        .ticker-down { color: #f87171; }
+        .ticker-arrow { font-size: 10px; }
+        .ticker-sep { color: #334155; }
+        @keyframes tickerScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* ===== HERO CANDLESTICK CHART ANIMATION ===== */
+        .hero-chart-container {
+            position: absolute; right: -5%; top: 50%; transform: translateY(-50%);
+            width: 500px; height: 400px; opacity: 0.12; pointer-events: none;
+            z-index: 0;
+        }
+        @media (max-width: 1024px) { .hero-chart-container { display: none; } }
+
+        .candle { fill: none; stroke-width: 3; stroke-linecap: round; }
+        .candle-green { stroke: #34d399; }
+        .candle-red { stroke: #f87171; }
+        .candle-wick { stroke-width: 1.5; opacity: 0.6; }
+
+        .candle-anim { stroke-dasharray: 100; stroke-dashoffset: 100; animation: drawCandle 2s ease-out forwards; }
+        @keyframes drawCandle { to { stroke-dashoffset: 0; } }
+        .candle-delay-1 { animation-delay: 0.2s; }
+        .candle-delay-2 { animation-delay: 0.6s; }
+        .candle-delay-3 { animation-delay: 1.0s; }
+        .candle-delay-4 { animation-delay: 1.4s; }
+        .candle-delay-5 { animation-delay: 1.8s; }
+
+        .trend-line {
+            fill: none; stroke: url(#trendGradient); stroke-width: 2; stroke-linecap: round;
+            stroke-dasharray: 500; stroke-dashoffset: 500;
+            animation: drawTrend 3s ease-out 1s forwards;
+            opacity: 0.5;
+        }
+        @keyframes drawTrend { to { stroke-dashoffset: 0; } }
+
+        /* ===== FLOATING CANDLES IN SECTIONS ===== */
+        .float-candle {
+            position: absolute; pointer-events: none; opacity: 0.08;
+            animation: floatCandle 8s ease-in-out infinite;
+        }
+        @keyframes floatCandle {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(3deg); }
+        }
+        .fc-1 { top: 10%; left: 5%; animation-delay: 0s; }
+        .fc-2 { top: 60%; right: 8%; animation-delay: 2s; animation-duration: 10s; }
+        .fc-3 { bottom: 15%; left: 12%; animation-delay: 4s; animation-duration: 12s; }
+
+        /* ===== GLASS ===== */
         .glass-panel {
             background: rgba(15, 23, 42, 0.45);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255,255,255,0.05);
             box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.03);
         }
-
         .glass-card {
             background: rgba(15, 23, 42, 0.35);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255,255,255,0.04);
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
+            position: relative; overflow: hidden;
         }
         .glass-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; height: 1px;
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
             background: linear-gradient(90deg, transparent, rgba(59,130,246,0.3), transparent);
-            opacity: 0;
-            transition: opacity 0.5s ease;
+            opacity: 0; transition: opacity 0.5s ease;
         }
         .glass-card:hover {
             border-color: rgba(59,130,246,0.15);
@@ -150,50 +170,22 @@
         }
         .glass-card:hover::before { opacity: 1; }
 
-        /* Gradient text */
         .text-gradient {
             background: linear-gradient(135deg, #60a5fa 0%, #818cf8 50%, #c084fc 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
         }
 
-        /* Nav link underline animation */
         .nav-link { position: relative; }
         .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -4px; left: 50%;
-            width: 0; height: 2px;
-            background: #3b82f6;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border-radius: 2px;
-            transform: translateX(-50%);
+            content: ''; position: absolute; bottom: -4px; left: 50%; width: 0; height: 2px;
+            background: #3b82f6; transition: all 0.3s cubic-bezier(0.4,0,0.2,1); border-radius: 2px; transform: translateX(-50%);
         }
-        .nav-link:hover::after,
-        .nav-link.active::after { width: 100%; }
+        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
 
-        /* ===== REVEAL ANIMATIONS ===== */
-        .reveal {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .reveal-delay-1 { transition-delay: 0.1s; }
-        .reveal-delay-2 { transition-delay: 0.2s; }
-        .reveal-delay-3 { transition-delay: 0.3s; }
-        .reveal-delay-4 { transition-delay: 0.4s; }
-
-        /* Stagger children inside reveal containers */
-        .stagger-children > * {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
+        /* ===== REVEAL ===== */
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .stagger-children > * { opacity: 0; transform: translateY(20px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
         .stagger-children.visible > *:nth-child(1) { transition-delay: 0.1s; opacity:1; transform:translateY(0); }
         .stagger-children.visible > *:nth-child(2) { transition-delay: 0.2s; opacity:1; transform:translateY(0); }
         .stagger-children.visible > *:nth-child(3) { transition-delay: 0.3s; opacity:1; transform:translateY(0); }
@@ -203,143 +195,61 @@
         .stagger-children.visible > *:nth-child(7) { transition-delay: 0.7s; opacity:1; transform:translateY(0); }
         .stagger-children.visible > *:nth-child(8) { transition-delay: 0.8s; opacity:1; transform:translateY(0); }
 
-        /* ===== HERO TYPOGRAPHY ENTRANCE ===== */
-        .hero-fade-up {
-            opacity: 0;
-            transform: translateY(30px);
-            animation: heroFadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
+        /* Hero entrance */
+        .hero-fade-up { opacity: 0; transform: translateY(30px); animation: heroFadeUp 1s cubic-bezier(0.16,1,0.3,1) forwards; }
         .hero-fade-up.d1 { animation-delay: 0.2s; }
         .hero-fade-up.d2 { animation-delay: 0.4s; }
         .hero-fade-up.d3 { animation-delay: 0.6s; }
         .hero-fade-up.d4 { animation-delay: 0.8s; }
+        @keyframes heroFadeUp { to { opacity: 1; transform: translateY(0); } }
 
-        @keyframes heroFadeUp {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Badge pulse */
-        .pulse-dot {
-            position: relative;
-            display: inline-flex;
-        }
+        .pulse-dot { position: relative; display: inline-flex; }
         .pulse-dot::before {
-            content: '';
-            position: absolute;
-            inset: -4px;
-            border-radius: 50%;
-            background: rgba(59,130,246,0.4);
-            animation: badgePulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-            z-index: -1;
+            content: ''; position: absolute; inset: -4px; border-radius: 50%; background: rgba(59,130,246,0.4);
+            animation: badgePulse 2s cubic-bezier(0.4,0,0.6,1) infinite; z-index: -1;
         }
-        @keyframes badgePulse {
-            0%, 100% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.8); opacity: 0; }
-        }
+        @keyframes badgePulse { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.8); opacity: 0; } }
 
-        /* ===== BUTTON SHIMMER ===== */
-        .btn-shimmer {
-            position: relative;
-            overflow: hidden;
-        }
+        .btn-shimmer { position: relative; overflow: hidden; }
         .btn-shimmer::after {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 50%; height: 100%;
+            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-            transform: skewX(-20deg);
-            animation: btnShimmer 3s infinite;
+            transform: skewX(-20deg); animation: btnShimmer 3s infinite;
         }
-        @keyframes btnShimmer {
-            0% { left: -100%; }
-            20% { left: 150%; }
-            100% { left: 150%; }
-        }
+        @keyframes btnShimmer { 0% { left: -100%; } 20% { left: 150%; } 100% { left: 150%; } }
 
-        /* ===== STAT COUNTER GRADIENT ===== */
-        .stat-num {
-            background: linear-gradient(180deg, #f8fafc 0%, #64748b 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            display: inline-block;
-        }
+        .stat-num { background: linear-gradient(180deg, #f8fafc 0%, #64748b 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; display: inline-block; }
         .stat-num-blue { background: linear-gradient(180deg, #60a5fa 0%, #3b82f6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
         .stat-num-emerald { background: linear-gradient(180deg, #34d399 0%, #10b981 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 
-        /* ===== PREMIUM SHIMMER BORDER ===== */
-        .shimmer-border {
-            position: relative;
-            background: rgba(15, 23, 42, 0.35);
-            border-radius: 1rem;
-            z-index: 1;
-            overflow: hidden;
-        }
+        .shimmer-border { position: relative; background: rgba(15,23,42,0.35); border-radius: 1rem; z-index: 1; overflow: hidden; }
         .shimmer-border::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            border-radius: 1rem;
-            padding: 1.5px;
+            content: ""; position: absolute; inset: 0; border-radius: 1rem; padding: 1.5px;
             background: conic-gradient(from var(--angle), rgba(59,130,246,0), rgba(59,130,246,0.6), rgba(129,140,248,0.6), rgba(59,130,246,0));
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
+            -webkit-mask-composite: xor; mask-composite: exclude;
             animation: rotateShimmer 4s linear infinite;
         }
         @property --angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
         @keyframes rotateShimmer { to { --angle: 360deg; } }
 
-        /* ===== FORM INPUTS ===== */
-        .input-glow {
-            transition: all 0.3s ease;
-        }
-        .input-glow:focus {
-            outline: none;
-            border-color: rgba(59,130,246,0.5);
-            box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
-        }
+        .input-glow { transition: all 0.3s ease; }
+        .input-glow:focus { outline: none; border-color: rgba(59,130,246,0.5); box-shadow: 0 0 0 3px rgba(37,99,235,0.12); }
 
-        /* ===== MOBILE MENU ===== */
-        #mobile-menu {
-            transition: max-height 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.4s ease;
-            max-height: 0; opacity: 0; overflow: hidden;
-        }
+        #mobile-menu { transition: max-height 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.4s ease; max-height: 0; opacity: 0; overflow: hidden; }
         #mobile-menu.open { max-height: 500px; opacity: 1; }
 
-        /* Header scroll */
-        header.scrolled {
-            background: rgba(11,17,32,0.85);
-            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
-            border-bottom-color: rgba(255,255,255,0.06);
-        }
-
-        /* ===== FLOATING PARTICLE DUST (CSS fallback if canvas blocked) ===== */
-        .dust {
-            position: absolute;
-            width: 2px; height: 2px;
-            background: rgba(96,165,250,0.3);
-            border-radius: 50%;
-            animation: dustFloat linear infinite;
-        }
-        @keyframes dustFloat {
-            0% { transform: translateY(0) translateX(0); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(-100vh) translateX(20px); opacity: 0; }
-        }
+        header.scrolled { background: rgba(11,17,32,0.85); box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5); border-bottom-color: rgba(255,255,255,0.06); }
     </style>
 </head>
 <body class="antialiased selection:bg-blue-500 selection:text-white">
 
-    <!-- ===== ANIMATED BACKGROUND LAYER ===== -->
+    <!-- ===== ANIMATED BACKGROUND ===== -->
     <div class="animated-bg">
         <div class="bg-grid"></div>
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
         <div class="orb orb-3"></div>
-        <!-- CSS dust particles for extra depth -->
         <div class="dust" style="left:10%;bottom:0;animation-duration:25s;animation-delay:0s;width:1px;height:1px;"></div>
         <div class="dust" style="left:25%;bottom:0;animation-duration:30s;animation-delay:5s;"></div>
         <div class="dust" style="left:40%;bottom:0;animation-duration:22s;animation-delay:2s;width:3px;height:3px;background:rgba(129,140,248,0.2);"></div>
@@ -349,19 +259,15 @@
         <div class="dust" style="left:95%;bottom:0;animation-duration:24s;animation-delay:1s;"></div>
     </div>
 
-    <!-- Interactive particle network canvas -->
-    <canvas id="particle-canvas"></canvas>
-
-    <!-- ===== CONTENT LAYER (z-10) ===== -->
-    <div class="relative z-10">
-
-        <!-- Top Banner -->
-        <div class="relative z-50 bg-gradient-to-r from-amber-600 via-amber-700 to-amber-800 text-white text-[11px] sm:text-xs text-center py-2.5 px-4 font-semibold shadow-inner tracking-wide">
-            <span class="inline-flex items-center gap-2">
-                <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-                Trading Brain 4u is a SEBI registered Research Analyst. We do not promise guaranteed returns, profit-sharing services, or any unlisted services. Act only on official communications.
-            </span>
+    <!-- ===== LIVE MARKET TICKER ===== -->
+    <div class="ticker-wrap relative z-30">
+        <div class="ticker-track" id="ticker-content">
+            <!-- duplicated via JS for seamless loop -->
         </div>
+    </div>
+
+    <!-- ===== CONTENT ===== -->
+    <div class="relative z-10">
 
         <!-- Header -->
         <header id="main-header" class="border-b border-slate-800/40 bg-slate-900/40 backdrop-blur-2xl sticky top-0 z-40 transition-all duration-500">
@@ -406,7 +312,55 @@
 
         <!-- Hero -->
         <section class="relative overflow-hidden py-20 lg:py-28 border-b border-slate-800/40">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+            
+            <!-- Animated candlestick chart background -->
+            <div class="hero-chart-container">
+                <svg viewBox="0 0 500 350" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="trendGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#34d399" stop-opacity="0.4"/>
+                            <stop offset="100%" stop-color="#60a5fa" stop-opacity="0.4"/>
+                        </linearGradient>
+                    </defs>
+                    <!-- Grid lines -->
+                    <line x1="0" y1="50" x2="500" y2="50" stroke="#1e293b" stroke-width="0.5" opacity="0.3"/>
+                    <line x1="0" y1="100" x2="500" y2="100" stroke="#1e293b" stroke-width="0.5" opacity="0.3"/>
+                    <line x1="0" y1="150" x2="500" y2="150" stroke="#1e293b" stroke-width="0.5" opacity="0.3"/>
+                    <line x1="0" y1="200" x2="500" y2="200" stroke="#1e293b" stroke-width="0.5" opacity="0.3"/>
+                    <line x1="0" y1="250" x2="500" y2="250" stroke="#1e293b" stroke-width="0.5" opacity="0.3"/>
+                    <line x1="0" y1="300" x2="500" y2="300" stroke="#1e293b" stroke-width="0.5" opacity="0.3"/>
+                    
+                    <!-- Candles -->
+                    <line class="candle-wick candle-red" x1="60" y1="110" x2="60" y2="70"/>
+                    <rect class="candle candle-red candle-anim" x="54" y="90" width="12" height="20" rx="2"/>
+                    
+                    <line class="candle-wick candle-green" x1="110" y1="150" x2="110" y2="100"/>
+                    <rect class="candle candle-green candle-anim candle-delay-1" x="104" y="100" width="12" height="50" rx="2"/>
+                    
+                    <line class="candle-wick candle-red" x1="160" y1="130" x2="160" y2="80"/>
+                    <rect class="candle candle-red candle-anim candle-delay-2" x="154" y="90" width="12" height="40" rx="2"/>
+                    
+                    <line class="candle-wick candle-green" x1="210" y1="140" x2="210" y2="70"/>
+                    <rect class="candle candle-green candle-anim candle-delay-3" x="204" y="70" width="12" height="70" rx="2"/>
+                    
+                    <line class="candle-wick candle-green" x1="260" y1="90" x2="260" y2="40"/>
+                    <rect class="candle candle-green candle-anim candle-delay-4" x="254" y="40" width="12" height="50" rx="2"/>
+                    
+                    <line class="candle-wick candle-red" x1="310" y1="120" x2="310" y2="60"/>
+                    <rect class="candle candle-red candle-anim candle-delay-3" x="304" y="70" width="12" height="50" rx="2"/>
+                    
+                    <line class="candle-wick candle-green" x1="360" y1="80" x2="360" y2="30"/>
+                    <rect class="candle candle-green candle-anim candle-delay-4" x="354" y="30" width="12" height="50" rx="2"/>
+                    
+                    <line class="candle-wick candle-green" x1="410" y1="70" x2="410" y2="20"/>
+                    <rect class="candle candle-green candle-anim candle-delay-5" x="404" y="20" width="12" height="50" rx="2"/>
+                    
+                    <!-- Trend line -->
+                    <path class="trend-line" d="M60,100 Q150,140 200,90 T300,60 T420,30"/>
+                </svg>
+            </div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center relative z-10">
                 <div class="lg:col-span-7 space-y-8 text-center lg:text-left">
                     <div class="hero-fade-up d1 inline-flex items-center gap-2 rounded-full bg-blue-500/8 px-4 py-1.5 text-xs font-semibold text-blue-400 border border-blue-500/15 backdrop-blur-sm">
                         <span class="pulse-dot h-2 w-2 rounded-full bg-blue-500 inline-block"></span>
@@ -501,8 +455,19 @@
         </section>
 
         <!-- Stats -->
-        <section class="relative border-b border-slate-800/40 bg-slate-900/20 py-14 backdrop-blur-sm">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section class="relative border-b border-slate-800/40 bg-slate-900/20 py-14 backdrop-blur-sm overflow-hidden">
+            <!-- Floating candles decoration -->
+            <div class="float-candle fc-1">
+                <svg width="24" height="40" viewBox="0 0 24 40" fill="none"><rect x="8" y="12" width="8" height="20" rx="2" fill="#10b981" opacity="0.4"/><line x1="12" y1="4" x2="12" y2="12" stroke="#10b981" stroke-width="1.5" opacity="0.4"/><line x1="12" y1="32" x2="12" y2="38" stroke="#10b981" stroke-width="1.5" opacity="0.4"/></svg>
+            </div>
+            <div class="float-candle fc-2">
+                <svg width="24" height="40" viewBox="0 0 24 40" fill="none"><rect x="8" y="8" width="8" height="24" rx="2" fill="#ef4444" opacity="0.3"/><line x1="12" y1="2" x2="12" y2="8" stroke="#ef4444" stroke-width="1.5" opacity="0.3"/><line x1="12" y1="32" x2="12" y2="38" stroke="#ef4444" stroke-width="1.5" opacity="0.3"/></svg>
+            </div>
+            <div class="float-candle fc-3">
+                <svg width="24" height="40" viewBox="0 0 24 40" fill="none"><rect x="8" y="14" width="8" height="18" rx="2" fill="#34d399" opacity="0.35"/><line x1="12" y1="6" x2="12" y2="14" stroke="#34d399" stroke-width="1.5" opacity="0.35"/><line x1="12" y1="32" x2="12" y2="38" stroke="#34d399" stroke-width="1.5" opacity="0.35"/></svg>
+            </div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4 text-center reveal stagger-children">
                     <div class="relative group p-2">
                         <div class="text-4xl sm:text-5xl font-black stat-num mb-2 tracking-tight">1000+</div>
@@ -525,7 +490,7 @@
         </section>
 
         <!-- Services -->
-        <section id="services" class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section id="services" class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
             <div class="text-center max-w-3xl mx-auto mb-16 reveal">
                 <span class="text-blue-400 text-xs font-bold uppercase tracking-[0.2em] mb-3 block">Our Coverage</span>
                 <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight uppercase">Strategic Research Subscriptions</h2>
@@ -754,14 +719,14 @@
             iconClose.classList.toggle('hidden');
         });
 
-        // Header scroll effect
+        // Header scroll
         const header = document.getElementById('main-header');
         window.addEventListener('scroll', () => {
             if (window.scrollY > 10) header.classList.add('scrolled');
             else header.classList.remove('scrolled');
         });
 
-        // IntersectionObserver for reveals
+        // Reveal observer
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -770,107 +735,42 @@
                 }
             });
         }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // ===== PARTICLE NETWORK CANVAS =====
-        const canvas = document.getElementById('particle-canvas');
-        const ctx = canvas.getContext('2d');
-        let width, height;
-        let particles = [];
-        const PARTICLE_COUNT = 60;
-        const CONNECTION_DIST = 120;
-        const MOUSE_DIST = 150;
+        // ===== TICKER DATA =====
+        const tickers = [
+            { symbol: 'NIFTY 50', price: '24,834.50', change: '+142.30', pct: '+0.58%', up: true },
+            { symbol: 'BANK NIFTY', price: '51,245.80', change: '+312.45', pct: '+0.61%', up: true },
+            { symbol: 'SENSEX', price: '81,450.20', change: '+285.60', pct: '+0.35%', up: true },
+            { symbol: 'NIFTY IT', price: '38,920.15', change: '-45.20', pct: '-0.12%', up: false },
+            { symbol: 'INDIA VIX', price: '12.45', change: '-0.85', pct: '-6.40%', up: false },
+            { symbol: 'USD/INR', price: '83.42', change: '+0.08', pct: '+0.10%', up: true },
+            { symbol: 'GOLD', price: '₹72,850', change: '+450', pct: '+0.62%', up: true },
+            { symbol: 'CRUDE OIL', price: '₹6,240', change: '-85', pct: '-1.34%', up: false },
+        ];
 
-        let mouse = { x: null, y: null };
-
-        window.addEventListener('mousemove', (e) => {
-            mouse.x = e.clientX;
-            mouse.y = e.clientY;
-        });
-        window.addEventListener('mouseleave', () => {
-            mouse.x = null; mouse.y = null;
-        });
-
-        function resize() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resize);
-        resize();
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height;
-                this.vx = (Math.random() - 0.5) * 0.4;
-                this.vy = (Math.random() - 0.5) * 0.4;
-                this.size = Math.random() * 1.5 + 0.5;
-                this.baseAlpha = Math.random() * 0.3 + 0.1;
-            }
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                if (this.x < 0 || this.x > width) this.vx *= -1;
-                if (this.y < 0 || this.y > height) this.vy *= -1;
-            }
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(96,165,250,${this.baseAlpha})`;
-                ctx.fill();
-            }
-        }
-
-        function initParticles() {
-            particles = [];
-            for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(new Particle());
-        }
-        initParticles();
-
-        function animate() {
-            ctx.clearRect(0, 0, width, height);
-            
-            particles.forEach(p => {
-                p.update();
-                p.draw();
+        function buildTicker() {
+            const track = document.getElementById('ticker-content');
+            let html = '';
+            // Double the items for seamless infinite loop
+            const all = [...tickers, ...tickers, ...tickers, ...tickers];
+            all.forEach(t => {
+                const color = t.up ? 'ticker-up' : 'ticker-down';
+                const arrow = t.up ? '▲' : '▼';
+                html += `
+                    <div class="ticker-item">
+                        <span class="ticker-symbol">${t.symbol}</span>
+                        <span class="ticker-sep">|</span>
+                        <span>${t.price}</span>
+                        <span class="${color} ticker-arrow">${arrow}</span>
+                        <span class="${color}">${t.change}</span>
+                        <span class="${color} text-[11px]">(${t.pct})</span>
+                    </div>
+                `;
             });
-
-            // Connect nearby particles
-            for (let i = 0; i < particles.length; i++) {
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const dist = Math.sqrt(dx*dx + dy*dy);
-                    if (dist < CONNECTION_DIST) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = `rgba(59,130,246,${0.08 * (1 - dist/CONNECTION_DIST)})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.stroke();
-                    }
-                }
-                // Connect to mouse
-                if (mouse.x !== null) {
-                    const dx = particles[i].x - mouse.x;
-                    const dy = particles[i].y - mouse.y;
-                    const dist = Math.sqrt(dx*dx + dy*dy);
-                    if (dist < MOUSE_DIST) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = `rgba(96,165,250,${0.15 * (1 - dist/MOUSE_DIST)})`;
-                        ctx.lineWidth = 0.6;
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(mouse.x, mouse.y);
-                        ctx.stroke();
-                    }
-                }
-            }
-            requestAnimationFrame(animate);
+            track.innerHTML = html;
         }
-        animate();
+        buildTicker();
     </script>
-
-    
 </body>
 </html>
